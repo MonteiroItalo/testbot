@@ -1,0 +1,23 @@
+import telebot
+#autenticando o bot
+TOKEN = '791359440:AAGuhW1kdSNbgYIN3Y1ppFm30TwSklRfB58'
+bot = telebot.TeleBot(TOKEN)
+
+#organizando start e help
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    bot.reply_to(message, "Olá, eu sou o PyRolês[14]! \nEu consigo fazer uploads de todas as fotos dos rolês que aconteceram na Python Brasil [14] para uma pasta no Google Drive. \nMas para isso acontecer, é necessário seguir algumas informações antes:\n\n▪️ É preciso que você envie por aqui a fotografia. Não envie como documento, eu só aceito 'ibagens'.  \n▪️ Não envie imagens de pessoas caso elas não queiram ou não saibam. Pergunte antes! 📵  \n▪️ Não envie nudes. 🔞  \n\nE lembre-se: \nPessoas >>> Tecnologia. \nUm ótimo evento para você! 💛💙")
+
+bot.polling()
+
+@bot.message_handler(content_types=['photo'])
+def get_doc(message):
+    raw = message.photo[-1].file_id
+    path = raw+".jpg"
+    file_info = bot.get_file(raw)
+    downloaded_file = bot.download_file(file_info.file_path)
+    with open('/Desktop/' + path,'wb') as new_file:
+        new_file.write(downloaded_file)
+    bot.reply_to(message, "ok")
+
+bot.polling()
